@@ -1,6 +1,9 @@
+// Player stats
 let ammo = 0;
 let clickPower = 1;
 let passivePower = 0;
+let maxHealth = 100;
+let currentHealth = 100;
 
 // Upgrade costs
 let clickPowerCost = 10;
@@ -15,17 +18,23 @@ let tanks = 0;
 // Invasion
 let invasionProgress = 0;
 let invasionStrength = 1;
-const invasionSpeed = 0.5; // % per tick
+const invasionSpeed = 0.5;
 
 // Elements
 const scoreEl = document.getElementById("score");
+const healthBar = document.getElementById("healthBar");
 const invasionBar = document.getElementById("invasionBar");
 const invasionText = document.getElementById("invasionText");
+const damageEl = document.getElementById("damageNumbers");
+const gameOverEl = document.getElementById("gameOver");
+const clickBtn = document.getElementById("clickBtn");
 
-// Ammo crate click
-document.getElementById("clickBtn").addEventListener("click", () => {
+// Click ammo crate
+clickBtn.addEventListener("click", () => {
   ammo += clickPower;
   updateScore();
+  clickBtn.style.transform = "scale(1.2)";
+  setTimeout(() => clickBtn.style.transform = "scale(1)", 100);
 });
 
 // Buy upgrades
@@ -66,7 +75,44 @@ document.getElementById("buyTank").addEventListener("click", () => {
   }
 });
 
-// Passive ammo per second
+// Health upgrades and healing
+document.getElementById("upgradeHealth").addEventListener("click", () => {
+  if (ammo >= 50) {
+    ammo -= 50;
+    maxHealth += 20;
+    currentHealth = maxHealth;
+    updateScore();
+  }
+});
+
+document.getElementById("healPlayer").addEventListener("click", () => {
+  if (ammo >= 20) {
+    ammo -= 20;
+    currentHealth = Math.min(maxHealth, currentHealth + 30);
+    updateScore();
+  }
+});
+
+// Abilities
+document.getElementById("doubleClick").addEventListener("click", () => {
+  if (ammo >= 30) {
+    ammo -= 30;
+    clickPower *= 2;
+    setTimeout(() => { clickPower /= 2; }, 10000); // 10s boost
+    updateScore();
+  }
+});
+
+document.getElementById("nuke").addEventListener("click", () => {
+  if (ammo >= 100) {
+    ammo -= 100;
+    invasionProgress = 0;
+    invasionStrength = Math.max(1, invasionStrength - 2); // damage invasion
+    updateScore();
+  }
+});
+
+// Passive ammo
 setInterval(() => {
   ammo += passivePower;
   updateScore();
@@ -74,23 +120,42 @@ setInterval(() => {
 
 // Invasion loop
 setInterval(() => {
+  if (currentHealth <= 0) return;
+
   invasionProgress += invasionSpeed;
   if (invasionProgress > 100) {
-    // Troops defend
     let totalDefense = soldiers * 1 + tanks * 5;
     if (totalDefense >= invasionStrength) {
-      invasionText.textContent = `Invasion defeated! Troops handled ${invasionStrength} enemies!`;
+      showDamage(`-${invasionStrength} enemies defeated!`);
     } else {
-      let lostAmmo = Math.max(0, (invasionStrength - totalDefense) * 10);
-      ammo = Math.max(0, ammo - lostAmmo);
-      invasionText.textContent = `Invasion! You lost ${lostAmmo} ammo!`;
+      let damage = Math.max(0, (invasionStrength - totalDefense) * 10);
+      currentHealth -= damage;
+      showDamage(`-${damage} HP`);
+      if (currentHealth <= 0) {
+        currentHealth = 0;
+        gameOverEl.style.display = "block";
+      }
     }
-    // Reset invasion
     invasionProgress = 0;
-    invasionStrength += 0.5; // get harder each wave
+    invasionStrength += 0.5;
   }
   invasionBar.style.width = `${invasionProgress}%`;
+  updateHealthBar();
 }, 100);
+
+// Show damage numbers
+function showDamage(text) {
+  const dmg = document.createElement("div");
+  dmg.textContent = text;
+  dmg.style.position = "absolute";
+  dmg.style.left = "50%";
+  dmg.style.top = "50px";
+  dmg.style.transform = "translateX(-50%)";
+  dmg.style.color = "yellow";
+  dmg.style.fontSize = "20px";
+  damageEl.appendChild(dmg);
+  setTimeout(() => dmg.remove(), 1000);
+}
 
 // Update display
 function updateScore() {
@@ -100,3 +165,18 @@ function updateScore() {
   document.getElementById("buySoldier").textContent = `Buy Soldier (Defense 1) - Cost: ${soldierCost}`;
   document.getElementById("buyTank").textContent = `Buy Tank (Defense 5) - Cost: ${tankCost}`;
 }
+
+// Update health bar
+function updateHealthBar() {
+  healthBar.style.width = `${(currentHealth / maxHealth) * 100}%`;
+  if (currentHealth / maxHealth > 0.5) {
+    healthBar.style.backgroundColor = "green";
+  } else if (currentHealth / maxHealth > 0.2) {
+    healthBar.style.backgroundColor = "orange";
+  } else {
+    healthBar.style.backgroundColor = "red";
+  }
+}
+
+updateHealthBar();
+updateScore();
