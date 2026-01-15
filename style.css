@@ -1,0 +1,21 @@
+body {
+  font-family: Arial;
+  text-align: center;
+  background-color: #222;
+  color: #eee;
+}
+
+button {
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#clickBtn {
+  font-size: 24px;
+  background-color: #444;
+  color: #fff;
+  border: 2px solid #888;
+  border-radius: 10px;
+}
