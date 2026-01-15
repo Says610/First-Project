@@ -1,14 +1,28 @@
 let ammo = 0;
 let clickPower = 1;
 let passivePower = 0;
-let troops = 0;
-let invasionInterval;
+
+// Upgrade costs
+let clickPowerCost = 10;
+let passiveCost = 20;
+let soldierCost = 50;
+let tankCost = 200;
+
+// Troops
+let soldiers = 0;
+let tanks = 0;
+
+// Invasion
+let invasionProgress = 0;
+let invasionStrength = 1;
+const invasionSpeed = 0.5; // % per tick
 
 // Elements
 const scoreEl = document.getElementById("score");
-const invasionEl = document.getElementById("invasion");
+const invasionBar = document.getElementById("invasionBar");
+const invasionText = document.getElementById("invasionText");
 
-// Click button
+// Ammo crate click
 document.getElementById("clickBtn").addEventListener("click", () => {
   ammo += clickPower;
   updateScore();
@@ -16,54 +30,73 @@ document.getElementById("clickBtn").addEventListener("click", () => {
 
 // Buy upgrades
 document.getElementById("buyClickPower").addEventListener("click", () => {
-  if (ammo >= 10) {
-    ammo -= 10;
+  if (ammo >= clickPowerCost) {
+    ammo -= clickPowerCost;
     clickPower += 1;
+    clickPowerCost = Math.floor(clickPowerCost * 1.5);
     updateScore();
   }
 });
 
 document.getElementById("buyPassive").addEventListener("click", () => {
-  if (ammo >= 20) {
-    ammo -= 20;
+  if (ammo >= passiveCost) {
+    ammo -= passiveCost;
     passivePower += 1;
+    passiveCost = Math.floor(passiveCost * 1.5);
     updateScore();
   }
 });
 
-document.getElementById("buyTroop").addEventListener("click", () => {
-  if (ammo >= 50) {
-    ammo -= 50;
-    troops += 1;
+// Buy troops
+document.getElementById("buySoldier").addEventListener("click", () => {
+  if (ammo >= soldierCost) {
+    ammo -= soldierCost;
+    soldiers += 1;
+    soldierCost = Math.floor(soldierCost * 1.5);
     updateScore();
   }
 });
 
-// Passive ammo every second
+document.getElementById("buyTank").addEventListener("click", () => {
+  if (ammo >= tankCost) {
+    ammo -= tankCost;
+    tanks += 1;
+    tankCost = Math.floor(tankCost * 1.5);
+    updateScore();
+  }
+});
+
+// Passive ammo per second
 setInterval(() => {
   ammo += passivePower;
   updateScore();
 }, 1000);
 
-// Random invasions
-function startInvasions() {
-  invasionInterval = setInterval(() => {
-    let enemyStrength = Math.floor(Math.random() * 5) + 1;
-    if (troops >= enemyStrength) {
-      invasionEl.textContent = `An invasion came! Your troops defeated ${enemyStrength} enemies!`;
+// Invasion loop
+setInterval(() => {
+  invasionProgress += invasionSpeed;
+  if (invasionProgress > 100) {
+    // Troops defend
+    let totalDefense = soldiers * 1 + tanks * 5;
+    if (totalDefense >= invasionStrength) {
+      invasionText.textContent = `Invasion defeated! Troops handled ${invasionStrength} enemies!`;
     } else {
-      ammo = Math.max(0, ammo - (enemyStrength - troops) * 5);
-      invasionEl.textContent = `An invasion came! You lost ${(enemyStrength - troops) * 5} ammo!`;
+      let lostAmmo = Math.max(0, (invasionStrength - totalDefense) * 10);
+      ammo = Math.max(0, ammo - lostAmmo);
+      invasionText.textContent = `Invasion! You lost ${lostAmmo} ammo!`;
     }
-  }, 10000);
-}
+    // Reset invasion
+    invasionProgress = 0;
+    invasionStrength += 0.5; // get harder each wave
+  }
+  invasionBar.style.width = `${invasionProgress}%`;
+}, 100);
 
 // Update display
 function updateScore() {
   scoreEl.textContent = `Ammo: ${ammo}`;
-  document.getElementById("buyClickPower").textContent = `Buy Ammo Upgrade (+1 per click) - Cost: 10`;
-  document.getElementById("buyPassive").textContent = `Buy Ammo Supply (+1/sec) - Cost: 20`;
-  document.getElementById("buyTroop").textContent = `Buy Troop (Defends against invasions) - Cost: 50`;
+  document.getElementById("buyClickPower").textContent = `Buy Ammo Upgrade (+1 per click) - Cost: ${clickPowerCost}`;
+  document.getElementById("buyPassive").textContent = `Buy Ammo Supply (+1/sec) - Cost: ${passiveCost}`;
+  document.getElementById("buySoldier").textContent = `Buy Soldier (Defense 1) - Cost: ${soldierCost}`;
+  document.getElementById("buyTank").textContent = `Buy Tank (Defense 5) - Cost: ${tankCost}`;
 }
-
-startInvasions();
