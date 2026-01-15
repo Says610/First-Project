@@ -10,6 +10,7 @@ button {
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
+  border-radius: 5px;
 }
 
 #clickBtn {
@@ -18,4 +19,26 @@ button {
   color: #fff;
   border: 2px solid #888;
   border-radius: 10px;
+  transition: transform 0.1s;
+}
+
+#clickBtn:active {
+  transform: scale(1.1);
+}
+
+/* Invasion progress bar */
+#invasionContainer {
+  width: 80%;
+  height: 25px;
+  background-color: #555;
+  margin: 10px auto;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+#invasionBar {
+  height: 100%;
+  width: 0%;
+  background-color: red;
+  transition: width 0.2s;
 }
