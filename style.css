@@ -17,7 +17,6 @@ button {
   cursor: pointer;
   transition: transform 0.1s;
 }
-
 #clickBtn:active {
   transform: scale(1.2);
 }
@@ -31,7 +30,6 @@ button {
   border-radius: 5px;
   overflow: hidden;
 }
-
 #healthBar {
   height: 100%;
   width: 100%;
@@ -48,7 +46,6 @@ button {
   border-radius: 5px;
   overflow: hidden;
 }
-
 #invasionBar {
   height: 100%;
   width: 0%;
@@ -57,12 +54,30 @@ button {
 }
 
 /* Damage numbers */
-#damageNumbers {
+#damageNumbers div {
   position: absolute;
-  top: 50px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 20px;
   color: yellow;
+  font-size: 20px;
   pointer-events: none;
+  animation: floatUp 1s ease-out forwards;
+}
+@keyframes floatUp {
+  0% {opacity:1; transform: translateY(0);}
+  100% {opacity:0; transform: translateY(-50px);}
+}
+
+/* Troops display */
+#troopDisplay img {
+  width: 50px;
+  margin: 0 5px;
+}
+
+/* Enemy animation */
+#enemyImg {
+  transition: transform 0.3s;
+}
+.attackAnimation {
+  transform: translateX(-20px);
 }
