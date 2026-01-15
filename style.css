@@ -1,21 +1,29 @@
+/* BODY */
 body {
-  background-color: #f2f2f2;
+  background-color: #f0f0f0;
   font-family: Arial, sans-serif;
   display: flex;
   justify-content: center;
+  margin: 0;
+  padding: 20px;
 }
 
+/* CONTAINER GRID */
 .container {
-  width: 600px;
-  text-align: center;
-  background-color: #ffffff;
+  display: grid;
+  grid-template-columns: 450px 250px;
+  gap: 20px;
+  background-color: #fff;
   padding: 20px;
   border-radius: 15px;
-  box-shadow: 0px 5px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
 }
 
-h1, h2 {
-  color: #333;
+/* LEFT COLUMN */
+.left-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .stats p {
@@ -28,7 +36,7 @@ h1, h2 {
 }
 
 #clickBtn {
-  width: 150px;
+  width: 200px;
   cursor: pointer;
   transition: transform 0.1s;
 }
@@ -37,26 +45,7 @@ h1, h2 {
   transform: scale(1.2);
 }
 
-.upgrades, .troops, .abilities {
-  margin: 15px 0;
-}
-
-.upgrades button, .troops button, .abilities button {
-  margin: 5px;
-  padding: 10px 15px;
-  font-size: 14px;
-  cursor: pointer;
-  border-radius: 5px;
-  border: none;
-  background-color: #4CAF50;
-  color: white;
-  transition: background 0.2s;
-}
-
-.upgrades button:hover, .troops button:hover, .abilities button:hover {
-  background-color: #45a049;
-}
-
+/* INVASION */
 #invasionContainer {
   width: 100%;
   height: 25px;
@@ -65,7 +54,6 @@ h1, h2 {
   overflow: hidden;
   margin: 10px 0;
 }
-
 #invasionBar {
   height: 100%;
   width: 0%;
@@ -73,6 +61,7 @@ h1, h2 {
   transition: width 0.2s;
 }
 
+/* DAMAGE NUMBERS */
 #damageNumbers div {
   position: absolute;
   left: 50%;
@@ -81,16 +70,40 @@ h1, h2 {
   font-weight: bold;
   animation: floatUp 1s ease-out forwards;
 }
-
 @keyframes floatUp {
   0% {opacity:1; transform: translateY(0);}
   100% {opacity:0; transform: translateY(-50px);}
 }
 
-#gameOver {
-  display: none;
-  font-size: 24px;
-  color: red;
-  margin-top: 20px;
+/* RIGHT COLUMN */
+.right-column {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
 
+.right-column button {
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.right-column button:hover {
+  background-color: #45a049;
+}
+
+/* GAME OVER */
+#gameOver {
+  display: none;
+  font-size: 28px;
+  color: red;
+  margin-top: 20px;
+  font-weight: bold;
+  text-align: center;
+}
