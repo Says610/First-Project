@@ -1,51 +1,71 @@
 body {
-  font-family: Arial;
-  text-align: center;
-  background-color: #222;
-  color: #eee;
+  background-color: #f2f2f2;
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
 }
 
-button {
-  margin: 5px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 5px;
+.container {
+  width: 600px;
+  text-align: center;
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0px 5px 20px rgba(0,0,0,0.3);
+}
+
+h1, h2 {
+  color: #333;
+}
+
+.stats p {
+  font-size: 18px;
+  margin: 5px 0;
+}
+
+.click-area {
+  margin: 20px 0;
 }
 
 #clickBtn {
+  width: 150px;
   cursor: pointer;
   transition: transform 0.1s;
 }
+
 #clickBtn:active {
   transform: scale(1.2);
 }
 
-/* Health bar */
-#healthContainer {
-  width: 50%;
-  height: 25px;
-  background-color: #555;
-  margin: 10px auto;
-  border-radius: 5px;
-  overflow: hidden;
-}
-#healthBar {
-  height: 100%;
-  width: 100%;
-  background-color: green;
-  transition: width 0.2s;
+.upgrades, .troops, .abilities {
+  margin: 15px 0;
 }
 
-/* Invasion progress bar */
+.upgrades button, .troops button, .abilities button {
+  margin: 5px;
+  padding: 10px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  transition: background 0.2s;
+}
+
+.upgrades button:hover, .troops button:hover, .abilities button:hover {
+  background-color: #45a049;
+}
+
 #invasionContainer {
-  width: 80%;
+  width: 100%;
   height: 25px;
-  background-color: #555;
-  margin: 10px auto;
+  background-color: #ddd;
   border-radius: 5px;
   overflow: hidden;
+  margin: 10px 0;
 }
+
 #invasionBar {
   height: 100%;
   width: 0%;
@@ -53,31 +73,24 @@ button {
   transition: width 0.2s;
 }
 
-/* Damage numbers */
 #damageNumbers div {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  color: yellow;
-  font-size: 20px;
-  pointer-events: none;
+  color: #ffcc00;
+  font-weight: bold;
   animation: floatUp 1s ease-out forwards;
 }
+
 @keyframes floatUp {
   0% {opacity:1; transform: translateY(0);}
   100% {opacity:0; transform: translateY(-50px);}
 }
 
-/* Troops display */
-#troopDisplay img {
-  width: 50px;
-  margin: 0 5px;
+#gameOver {
+  display: none;
+  font-size: 24px;
+  color: red;
+  margin-top: 20px;
 }
 
-/* Enemy animation */
-#enemyImg {
-  transition: transform 0.3s;
-}
-.attackAnimation {
-  transform: translateX(-20px);
-}
